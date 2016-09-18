@@ -160,7 +160,11 @@ class HttpTransport(object):
                 headers.update({'content-type': kwargs['type']})
         else:
             body = self._generate_body()  # hack
-        response, data = self._http.request(url, self._method, body=body, headers=headers)
+
+        byte_body = None
+        if body is not None:
+            byte_body = bytes(map(ord, body))
+        response, data = self._http.request(url, self._method, body=byte_body, headers=headers)
 
         self._attribute_stack = []
         handler = kwargs.get('handler', _handle_response)
