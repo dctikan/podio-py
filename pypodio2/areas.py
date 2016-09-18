@@ -537,7 +537,7 @@ class Conversation(Area):
 
 class Files(Area):
     def find(self, file_id):
-        pass
+        return self.transport.GET(url='/file/%d' % file_id)
 
     def find_raw(self, file_id):
         """Returns raw file as string. Pass to a file object"""
