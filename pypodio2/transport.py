@@ -43,7 +43,7 @@ class OAuthAuthorization(object):
                 'client_secret': self.secret,
                 'refresh_token': self.token.refresh_token,
                 }
-        h = Http(disable_ssl_certificate_validation=True)
+        h = Http()
         headers = {'content-type': 'application/x-www-form-urlencoded'}
         response, data = h.request(self.domain + self.token_url, "POST",
                                    urlencode(body), headers=headers)
@@ -59,7 +59,7 @@ class OAuthAuthorization(object):
                 'client_secret': secret,
                 'username': login,
                 'password': password}
-        h = Http(disable_ssl_certificate_validation=True)
+        h = Http()
         headers = {'content-type': 'application/x-www-form-urlencoded'}
         response, data = h.request(self.domain + self.token_url, "POST",
                                    urlencode(body), headers=headers)
@@ -79,7 +79,7 @@ class OAuthAppAuthorization(object):
                 'client_secret': secret,
                 'app_id': app_id,
                 'app_token': app_token}
-        h = Http(disable_ssl_certificate_validation=True)
+        h = Http()
         headers = {'content-type': 'application/x-www-form-urlencoded'}
         response, data = h.request(domain + "/oauth/token", "POST",
                                    urlencode(body), headers=headers)
@@ -129,7 +129,7 @@ class HttpTransport(object):
         self._attribute_stack = []
         self._method = "GET"
         self._posts = []
-        self._http = Http(disable_ssl_certificate_validation=True)
+        self._http = Http()
         self._params = {}
         self._url_template = '%(domain)s/%(generated_url)s'
         self._stack_collapser = "/".join
