@@ -72,6 +72,19 @@ class OAuthAuthorization(object):
 
 
 class OAuthAppAuthorization(object):
+    def refresh_token(self):
+        '''Refresh token'''
+        body = {
+                'grant_type': 'refresh_token',
+                'client_id': self.key,
+                'client_secret': self.secret,
+                'refresh_token': self.token.refresh_token,
+                }
+        h = Http()
+        headers = {'content-type': 'application/x-www-form-urlencoded'}
+        response, data = h.request(self.domain + self.token_url, "POST",
+                                   urlencode(body), headers=headers)
+        self.token = OAuthToken(_handle_response(response, data))
 
     def __init__(self, app_id, app_token, key, secret, domain):
         body = {'grant_type': 'app',
@@ -86,6 +99,8 @@ class OAuthAppAuthorization(object):
         self.token = OAuthToken(_handle_response(response, data))
 
     def __call__(self):
+        if self.token.expires_at <= datetime.now():
+            self.refresh_token()
         return self.token.to_headers()
 
 
